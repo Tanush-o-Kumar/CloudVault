@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database Container
+  db:
+    image: postgres:16-alpine
+    container_name: cloudvault_postgres
+    environment:
+      POSTGRES_USER: cloudvault_user
+      POSTGRES_PASSWORD: cloudvault_secure_password_change_me
+      POSTGRES_DB: cloudvault_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cloudvault_user -d cloudvault_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # FastAPI Backend Container
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    container_name: cloudvault_backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql+psycopg://cloudvault_user:cloudvault_secure_password_change_me@db:5432/cloudvault_db
+      SECRET_KEY: dev-super-secret-jwt-key-min-32-characters-long
+      STORAGE_BACKEND: local
+      LOCAL_STORAGE_PATH: /app/data/storage
+      MAX_UPLOAD_SIZE_BYTES: 10485760
+      CORS_ORIGINS: http://localhost,http://localhost:5173,http://localhost:80
+    ports:
+      - "8000:8000"
+    volumes:
+      - local_storage_data:/app/data/storage
+
+  # React Frontend Container
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: cloudvault_frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  postgres_data:
+  local_storage_data:
