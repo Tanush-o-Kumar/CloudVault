@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { X, UploadCloud, File, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { filesApi } from '../api/files';
 
-const MAX_SIZE_MB = 10;
+const MAX_SIZE_MB = 100;
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 const ALLOWED_EXTS = ['pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'txt', 'md', 'csv', 'json', 'docx', 'xlsx', 'pptx', 'zip'];
 

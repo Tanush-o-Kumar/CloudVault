@@ -9,7 +9,12 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import MyFilesPage from './pages/MyFilesPage';
 import SharedFilesPage from './pages/SharedFilesPage';
+import RecentFilesPage from './pages/RecentFilesPage';
+import StarredPage from './pages/StarredPage';
+import TrashPage from './pages/TrashPage';
 import ProfilePage from './pages/ProfilePage';
+import SettingsPage from './pages/SettingsPage';
+import HelpSupportPage from './pages/HelpSupportPage';
 
 function App() {
   return (
@@ -47,10 +52,66 @@ function App() {
             }
           />
           <Route
+            path="/shared-with-me"
+            element={
+              <ProtectedRoute>
+                <SharedFilesPage initialTab="received" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/shared-by-me"
+            element={
+              <ProtectedRoute>
+                <SharedFilesPage initialTab="sent" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/recent"
+            element={
+              <ProtectedRoute>
+                <RecentFilesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/starred"
+            element={
+              <ProtectedRoute>
+                <StarredPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/trash"
+            element={
+              <ProtectedRoute>
+                <TrashPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/profile"
             element={
               <ProtectedRoute>
                 <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <SettingsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/help"
+            element={
+              <ProtectedRoute>
+                <HelpSupportPage />
               </ProtectedRoute>
             }
           />

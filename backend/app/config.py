@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     PRESIGNED_URL_EXPIRATION_SECONDS: int = Field(default=900, description="Presigned URL validity in seconds (15m)")
 
     # Upload restrictions
-    MAX_UPLOAD_SIZE_BYTES: int = Field(default=10 * 1024 * 1024, description="Max upload file size in bytes (10MB)")
+    MAX_UPLOAD_SIZE_BYTES: int = Field(default=100 * 1024 * 1024, description="Max upload file size in bytes (100MB)")
     ALLOWED_EXTENSIONS: List[str] = Field(
         default=[
             "pdf", "png", "jpg", "jpeg", "gif", "webp", "svg",

@@ -7,6 +7,11 @@ import RegisterPage from '../pages/RegisterPage';
 import UploadModal from '../components/UploadModal';
 import ConfirmModal from '../components/ConfirmModal';
 import FileCard from '../components/FileCard';
+import Sidebar from '../components/Sidebar';
+import Header from '../components/Header';
+import TrashPage from '../pages/TrashPage';
+import HelpSupportPage from '../pages/HelpSupportPage';
+import SettingsPage from '../pages/SettingsPage';
 import { AuthProvider } from '../context/AuthContext';
 
 describe('CloudVault Frontend UI Tests', () => {
@@ -134,5 +139,68 @@ describe('CloudVault Frontend UI Tests', () => {
     const downloadBtn = screen.getByTitle(/download file/i);
     fireEvent.click(downloadBtn);
     expect(downloadMock).toHaveBeenCalledWith(mockFile);
+  });
+
+  it('renders Sidebar with complete SaaS navigation menu items', () => {
+    render(
+      <MemoryRouter>
+        <AuthProvider>
+          <Sidebar onUploadClick={() => {}} />
+        </AuthProvider>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/dashboard/i)).toBeInTheDocument();
+    expect(screen.getByText(/my files/i)).toBeInTheDocument();
+    expect(screen.getByText(/shared with me/i)).toBeInTheDocument();
+    expect(screen.getByText(/shared by me/i)).toBeInTheDocument();
+    expect(screen.getByText(/recent files/i)).toBeInTheDocument();
+    expect(screen.getByText(/starred/i)).toBeInTheDocument();
+    expect(screen.getByText(/trash/i)).toBeInTheDocument();
+    expect(screen.getByText(/profile/i)).toBeInTheDocument();
+    expect(screen.getByText(/settings/i)).toBeInTheDocument();
+    expect(screen.getByText(/help & support/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /upload file/i })).toBeInTheDocument();
+  });
+
+  it('renders Header with omnibox search and activity notifications toggle', () => {
+    render(
+      <MemoryRouter>
+        <AuthProvider>
+          <Header />
+        </AuthProvider>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByPlaceholderText(/search files, documents, and media/i)).toBeInTheDocument();
+    expect(screen.getByTitle(/recent activity & notifications/i)).toBeInTheDocument();
+  });
+
+  it('renders TrashPage explaining immediate zero-retention S3 purge policy', () => {
+    render(
+      <MemoryRouter>
+        <AuthProvider>
+          <TrashPage />
+        </AuthProvider>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/trash & data retention/i)).toBeInTheDocument();
+    expect(screen.getByText(/trash is empty/i)).toBeInTheDocument();
+    expect(screen.getByText(/immediate permanent purge/i)).toBeInTheDocument();
+  });
+
+  it('renders HelpSupportPage with FAQs and cloud architecture highlights', () => {
+    render(
+      <MemoryRouter>
+        <AuthProvider>
+          <HelpSupportPage />
+        </AuthProvider>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/help & cloud security documentation/i)).toBeInTheDocument();
+    expect(screen.getByText(/amazon s3 decoupling/i)).toBeInTheDocument();
+    expect(screen.getByText(/argon2id & jwt/i)).toBeInTheDocument();
   });
 });
