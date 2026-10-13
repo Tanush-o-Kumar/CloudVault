@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Any, List, Optional
 import os
 from pydantic_settings import BaseSettings
 from pydantic import Field, field_validator
@@ -47,7 +47,7 @@ class Settings(BaseSettings):
     )
 
     # CORS
-    CORS_ORIGINS: List[str] = Field(
+    CORS_ORIGINS: Any = Field(
         default=["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173"],
         description="List of allowed CORS origins"
     )
@@ -55,9 +55,15 @@ class Settings(BaseSettings):
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
     def assemble_cors_origins(cls, v):
-        if isinstance(v, str) and not v.startswith("["):
+        if isinstance(v, str):
+            if v.startswith("["):
+                import json
+                try:
+                    return json.loads(v)
+                except json.JSONDecodeError:
+                    pass
             return [i.strip() for i in v.split(",") if i.strip()]
-        elif isinstance(v, (list, str)):
+        elif isinstance(v, list):
             return v
         return ["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173"]
 
