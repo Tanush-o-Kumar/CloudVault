@@ -10,11 +10,11 @@ The application features a decoupled cloud architecture that strictly isolates r
 
 ```mermaid
 graph TD
-    User([End User / Web Client]) -->|HTTPS / TLS| ReactApp["React 18 SPA (Vite + Tailwind CSS)"]
-    ReactApp -->|REST API Requests (JWT Auth)| Backend["FastAPI Backend (Amazon EC2 / Python 3.13)"]
+    User(["End User / Web Client"]) -->|HTTPS / TLS| ReactApp["React 18 SPA (Vite + Tailwind CSS)"]
+    ReactApp -->|"REST API Requests (JWT Auth)"| Backend["FastAPI Backend (Amazon EC2 / Python 3.13)"]
     
-    Backend -->|IAM Role (STS Temp Credentials)| S3[("Amazon S3 (Private Bucket)\nAES-256 SSE-S3 Encrypted")]
-    Backend -->|SQLAlchemy ORM + Psycopg 3| Postgres[("PostgreSQL / Amazon RDS\nMetadata, Shares & Users")]
+    Backend -->|"IAM Role (STS Temp Credentials)"| S3[("Amazon S3 (Private Bucket)<br/>AES-256 SSE-S3 Encrypted")]
+    Backend -->|"SQLAlchemy ORM + Psycopg 3"| Postgres[("PostgreSQL / Amazon RDS<br/>Metadata, Shares & Users")]
 
     subgraph AWS Security Perimeter
         Backend
